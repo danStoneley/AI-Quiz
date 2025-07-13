@@ -1,12 +1,17 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
+import Difficulty from "./Difficulty";
+import Count from "./Count";
+import Topic from "./Topic";
+import Submit from "./Submit";
 
 function Input({ onQuizReady, onLoadingChange }) {
-    const arr = ["easy", "medium", "hard", "very hard", "impossible"]; // difficulty levels
     const [topic, setTopic] = useState("");
     const [count, setCount] = useState(10); // default count
     const [difficulty, setDifficulty] = useState("easy"); // default difficulty
 
-    const handleSubmit = async (e) => { // handle form submission
+    const handleSubmit = async (e) => {
+        // handle form submission
         e.preventDefault();
         onLoadingChange(true);
         try {
@@ -16,7 +21,7 @@ function Input({ onQuizReady, onLoadingChange }) {
                 body: JSON.stringify({
                     topic: topic.trim(),
                     count: count,
-                    difficulty: difficulty.trim(), 
+                    difficulty: difficulty.trim(),
                 }),
             });
             console.log(response);
@@ -29,63 +34,41 @@ function Input({ onQuizReady, onLoadingChange }) {
     };
     return (
         <>
-            <div className="mb-3">
-                <label
-                    htmlFor="exampleFormControlInput1"
-                    className="form-label"
-                >
-                    enter topic {topic.trim().length}/20
-                </label>
-                <input
-                    type="text"
-                    value={topic}
-                    required={true}
-                    onChange={(e) => setTopic(e.target.value)}
-                    maxLength="20"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    placeholder="gimme a topic"
-                ></input>
-            </div>
-            <label htmlFor="customRange1" className="form-label">
-                how many questions? {count}
-            </label>
-            <input
-                type="range"
-                min="1"
-                max="20"
-                defaultValue={count}
-                onChange={(e) => setCount(e.target.value)}
-                className="form-range"
-                id="questionRange"
-            ></input>
+            <Topic topic={topic} setTopic={setTopic} />
+            {topic.trim().length > 3 && (
+                <>
+                    <motion.div
+                        initial={{ opacity: 0, x: -200 }}
 
-            <div className="mb-3">
-                <label htmlFor="difficultySelect" className="form-label">
-                    select difficulty
-                </label>
-                <select
-                    type="hidden"
-                    value={difficulty}
-                    onChange={(e) => setDifficulty(e.target.value)}
-                    className="form-select"
-                    id="difficultySelect"
-                >
-                    {arr.map((item) => (
-                        <option key={item} value={item}>
-                            {item}
-                        </option>
-                    ))}
-                </select>
-                <button
-                    type="button"
-                    className="btn btn-primary mt-3"
-                    disabled={topic.trim().length < 3} // disable button if topic is empty or less than 3 characters
-                    onClick={handleSubmit}
-                >
-                    submit
-                </button>
-            </div>
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: .5 }}
+                    >
+                        <Difficulty
+                            topic={topic}
+                            difficulty={difficulty}
+                            setDifficulty={setDifficulty}
+                        />
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, x: -200 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: .75 }}
+                    >
+                        <Count
+                            topic={topic}
+                            count={count}
+                            setCount={setCount}
+                        />
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, x: -200 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 1 }}
+                    >
+                        <Submit topic={topic} handleSubmit={handleSubmit} />
+                    </motion.div>
+                </>
+            )}
         </>
     );
 }

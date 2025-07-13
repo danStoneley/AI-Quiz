@@ -3,6 +3,7 @@ import Quiz from "./components/Quiz";
 import Loading from "./components/Loading";
 import { useState } from "react";
 import Score from "./components/Score";
+import './App.css';
 
 function App() {
     const [quizData, setQuizData] = useState(null);

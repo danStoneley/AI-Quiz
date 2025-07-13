@@ -8,7 +8,7 @@ function Score({ score, total, resetForPlayAgain, quiz, answers }) {
         } else if (option === correctAnswer && answers[index] === correctAnswer) {
             return "list-group-item-success";
         } else if (option === correctAnswer && answers[index] !== correctAnswer) {
-            return "list-group-item-info";
+            return "list-group-item-success";
         }
         return "";
         
