@@ -24,7 +24,6 @@ function Input({ onQuizReady, onLoadingChange }) {
                     difficulty: difficulty.trim(),
                 }),
             });
-            console.log(response);
             const data = await response.json();
             onQuizReady(data);
             onLoadingChange(false);
